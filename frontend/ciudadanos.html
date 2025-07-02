@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión Ciudadanos InterPlanetarios</title>
+    <link rel="stylesheet" href="./src/scss/style.scss">
+</head>
+<body>   
+  <div class="row">
+    <div class="col py-3 justify-content-center text-center">
+      <h1>Gestión Ciudadanos InterPlanetarios</h1>
+    </div>
+  </div> 
+    <div class="container mt-4 bg-body rounded shadow">        
+    <div class="d-flex justify-content-end mb-2">
+        <button type="button" class="btn btn-primary" id="btnCrear">Crear</button>
+    </div>
+
+    <div class="table-responsive">
+  <table class="table table-bordered table-hover align-middle text-center w-100">
+    <thead class="table-light">
+      <tr>
+        <!--<th scope="col">Código</th>-->
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellidos</th>
+        <th scope="col">Apodo</th>
+        <th scope="col">F. Nacimiento</th>
+        <th scope="col">Origen</th>
+        <th scope="col">Residencia</th>
+        <th scope="col">Foto</th>
+        <th scope="col">QR</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+      <!-- Carga dinámica -->
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" 
+     id="modalCiudadanos" 
+     tabindex="-1" 
+     aria-labelledby="modalCiudadanosLabel" 
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header bg-body-primary">
+        <h1 class="modal-title fs-5" id="modalCiudadanosLabel">
+          Gestión Ciudadanos InterPolis
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body con Formulario -->
+      <div class="modal-body">
+        <form id="frmCiudadanos">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" placeholder="Nombre">
+          </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+            <label for="apellidos" class="form-label">Apellidos</label>
+            <input type="text" class="form-control" id="apellidos" placeholder="Apellidos">
+          </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+            <label for="apodo" class="form-label">Apodo</label>
+            <input type="text" class="form-control" id="apodo" placeholder="Apodo">
+          </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+            <label for="fechaNacimiento" class="form-label">Fecha Nacimiento</label>
+            <input type="date" class="form-control" id="fechaNacimiento">
+          </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+            <label for="planetaOrigen" class="form-label">Planeta Origen</label>
+            <input type="text" class="form-control" id="planetaOrigen" placeholder="Planeta Origen">
+          </div>                
+                </div> 
+                <div class="col">
+            <div class="mb-3">
+            <label for="planetaResidencia" class="form-label">Planeta Residencia</label>
+            <input type="text" class="form-control" id="planetaResidencia" placeholder="Planeta Residencia">
+          </div>
+          </div>                   
+            </div>
+            <div class="row">
+              <div class="col">
+                  <div class="mb-3">
+                    <label for="foto" class="form-label">Foto</label>
+                    <input type="text" class="form-control" id="foto" placeholder="Foto">
+                  </div>          
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <label for="codigoqr" class="form-label">Código QR</label>
+                  <input type="text" class="form-control" id="codigoqr" placeholder="Código QR">
+                </div>          
+              </div>
+            </div>  
+                      <!-- Footer con botones -->
+          <div class="modal-footer">
+            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+    <script type="module"   src="src/js/ciudadanos.js"></script>
+</body>
+</html>

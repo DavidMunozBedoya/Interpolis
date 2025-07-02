@@ -1,0 +1,53 @@
+
+# Primeros pasos desde la terminal con VITE
+## Creamos la carpeta frontend dentro del proyecto:
+
+ ** npm create vite@latest frontend **
+- elegimos vanilla
+- elegimos javascript
+- ingresamos el nombre del autor
+
+## Importaciones necesarias:
+- ** npm i bootstrap **
+- ** npm i --save bootstrap @popperjs/core **
+- ** npm i --save-dev sass **
+- ** npm i bootstrap-icons ** 
+- ** npm install sweetalert2 **
+- ** npm install -D sass-embedded **
+
+# Index.html
+- dentro del archivo creamos un link para que nos dirija al archivo html donde traeremos los datos de la base de datos.
+
+# Creacion carpetas necesarias src y scss
+
+- creamos la carpeta SCSS y dentro de esta el archivo style.css
+- dentro del archivo style importamos bootstrap y sus iconos: @import "bootstrap/scss/bootstrap";
+$bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
+@import "bootstrap-icons/font/bootstrap-icons";
+- adicionamos una tabla desde bootstrap para poder manejar los datos con un diseño predeterminado
+- creamos la carpeta src y dentro de esta otra js
+- dentro de js main.js importamos: import '../scss/style.scss'
+// Import all of Bootstrap’s JS
+import * as bootstrap from 'bootstrap'
+
+# Creacion del archivo html ciudadanos.html
+- creamos el layout del html para cargar los datos
+- instanciamos el css del archivo que importa style.scss
+- instanciamos el archivo ciudadanos.js script creado para el html en la carpeta js
+- adicionamos una modal que sera modificada con los campos o inputs necesarios para la base de datos, en el se crearan registros y se editaran
+- los botones dentro de la tabla se crearan dinamicamente con iconos de bootstrap.
+
+# Archivo JS ciudadanos.js
+- importacion de bootstrap para generar el body de la tabla y sweetalert para los mensajes: import * as bootstrap from 'bootstrap'
+import Swal from 'sweetalert2';
+- la url es la direccion que nos otorga la consola + "/la ruta del endpoint/"
+- se crean dos variables codigo para la columna codigo de la base de datos que se manejara en la modal para las diferentes acciones
+- la variable opcion para definir la accion del boton guardar de la modal, en ella diferencia si esta creando un nuevo registro o esta editando y con esto actue.
+
+# Funciones
+- se escucha la carga del DOM para que ejecute las funciones:
+- cargarCiudadanos(): la cual trae todos los datos desde la base de datos con la url + listar
+- llenarTabla:  llena el body de la tabla con los datos traidos por la funcion anterior
+- 
+
+
