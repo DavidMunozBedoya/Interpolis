@@ -39,7 +39,7 @@ function llenarTabla(datos) {
         const fechaFormateada = fecha.toLocaleDateString('es-CO'); // formato: dd/mm/yyyy
         let fila = `
         <tr>
-            <!--<td class="text-nowrap">${ciudadano.codigo}</td>-->
+            <td>${ciudadano.codigo}</td>
             <td>${ciudadano.nombre}</td>
             <td>${ciudadano.apellidos}</td>
             <td>${ciudadano.apodo_nickname}</td> 
@@ -96,27 +96,32 @@ tbody.addEventListener("click", (e)=>{
         const fila = boton.closest("tr");
         codigo = fila.children[0].textContent;
         Swal.fire({
-            title: "Seguro de eliminar el registro :" + codigo + "?",
+            title: "¿Seguro de eliminar el registro: " + codigo + "?",
             text: "Si lo borras cambia el estado a muerto!",
             icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((willDelete) =>{
-            fetch(url + "eliminacionLogica/" + codigo,{
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    estado: 2,
-                }),
-            })
-            .then((Response) => Response.json())
-            .then((Response) =>{
-                Swal.fire("Registro eliminado correctamente", {
-                    icon: "success",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(url + "eliminacionLogica/" + codigo,{
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        estado: 2,
+                    }),
+                })
+                .then((Response) => Response.json())
+                .then((Response) =>{
+                    Swal.fire({
+                        title: "Registro eliminado correctamente",
+                        icon: "success"
+                    });
+                    cargarCiudadanos();
                 });
-            });
+            }
         });
     }
 
