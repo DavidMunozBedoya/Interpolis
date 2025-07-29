@@ -7,9 +7,7 @@ export async function getUsuariosDb() {
 }
 
 export async function getUsuarioporIDDb(id) {
-    const [rows] = await dbconn.query("SELECT * FROM usuario WHERE idusuario = ?", [
-        id,
-    ]);
+    const [rows] = await dbconn.query("SELECT * FROM usuario WHERE idusuario = ?", [id]);
     return rows[0];
 }
 
@@ -18,9 +16,7 @@ export async function createUsuarioDb(usuarioData) {
     let password = usuarioData.password;
 
     const [correoExistente] = await dbconn.query(
-        "SELECT * FROM usuario WHERE correo = ?",
-        [correo]
-    );
+        "SELECT * FROM usuario WHERE correo = ?", [correo]);
 
     if (correoExistente.length > 0) {
         throw new Error("El correo ya está en uso");
@@ -40,10 +36,7 @@ export async function createUsuarioDb(usuarioData) {
 }
 
 export async function updateUsuarioDb(id, usuarioData) {
-    const [result] = await dbconn.query("UPDATE usuario SET ? WHERE idusuario = ?", [
-        usuarioData,
-        id
-    ]);
+    const [result] = await dbconn.query("UPDATE usuario SET ? WHERE idusuario = ?", [usuarioData, id]);
     return result;
 }
 
@@ -57,17 +50,15 @@ export async function authenticacionUsuarioDb(usuarioData) {
     let password = usuarioData.password;
 
     const [consultaRegistro] = await dbconn.query(
-        "SELECT * FROM usuario WHERE correo = ?",
-        [correo]
-    );
+        "SELECT * FROM usuario WHERE correo = ?", [correo]);
 
-    if(consultaRegistro.length > 0){
+    if (consultaRegistro.length > 0) {
         const siCoincide = bcrypt.compareSync(
-            password, 
+            password,
             consultaRegistro[0].password
         );
 
-        if(siCoincide){
+        if (siCoincide) {
             return consultaRegistro;
         } else {
             throw new Error("Contraseña incorrecta");
