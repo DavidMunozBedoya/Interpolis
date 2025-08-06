@@ -36,6 +36,10 @@ export async function createUsuarioDb(usuarioData) {
 }
 
 export async function updateUsuarioDb(id, usuarioData) {
+    // encriptacion de la contraseña si se proporciona o se actualiza
+    if(usuarioData.password && usuarioData.password !== "") {
+        usuarioData.password = bcrypt.hashSync(usuarioData.password, 11);
+    }
     const [result] = await dbconn.query("UPDATE usuario SET ? WHERE idusuario = ?", [usuarioData, id]);
     return result;
 }

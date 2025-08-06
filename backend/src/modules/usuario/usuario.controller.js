@@ -7,6 +7,8 @@ import{
     authenticacionUsuarioDb
 } from "./usuario.model.js";
 
+import validator from "validator";
+
 export async function getAllUsuarios(req, res) {
   try {
     const usuarios = await getUsuariosDb();
@@ -48,7 +50,12 @@ export async function getUsuarioById(req, res) {
 export async function createUsuario(req, res) {
     try {
     let data = req.body;
+    
     // Aquí debes añadir validaciones de entrada de datos --- passport-u otra libreria  !!!!!
+
+    const errores = [];  
+
+    console.log(data);
 
     const result = await createUsuarioDb(data);
     res.status(200).send({

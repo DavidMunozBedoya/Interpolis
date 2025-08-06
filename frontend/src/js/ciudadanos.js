@@ -21,7 +21,7 @@ let codigoqr = document.querySelector("#codigoqr");
 document.addEventListener("DOMContentLoaded", cargarCiudadanos);
 
 function cargarCiudadanos(){
-    fetch(url+"listar")
+    fetch(url+"listarciudadanos")
     .then(Response => Response.json())
     .then((datos)=>{
         //console.log(datos);
@@ -83,7 +83,10 @@ tbody.addEventListener("click", (e)=>{
         nombre.value = fila.children[1].textContent;
         apellidos.value = fila.children[2].textContent;
         apodo.value = fila.children[3].textContent;
-        fechaNacimiento.value = fila.children[4].textContent;
+        const fechaTabla = fila.children[4].textContent;
+        const [dia, mes, año] = fechaTabla.split('/');
+        fechaNacimiento.value = `${año}-${mes}-${dia}`;
+        console.log("la fecha de nacimiento es: ",fechaNacimiento.value);
         planetaOrigen.value = fila.children[5].textContent;
         planetaResidencia.value = fila.children[6].textContent;
         foto.value = fila.children[7].textContent;
@@ -104,14 +107,11 @@ tbody.addEventListener("click", (e)=>{
             cancelButtonText: "Cancelar"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(url + "eliminacionLogica/" + codigo,{
-                    method: "PUT",
+                fetch(url + "eliminarregistro/" + codigo,{
+                    method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        estado: 2,
-                    }),
+                    }
                 })
                 .then((Response) => Response.json())
                 .then((Response) =>{
@@ -137,7 +137,7 @@ frmCiudadanos.addEventListener('submit', (e)=>{
         });
     }else{
         if(opcion === "crear"){
-            fetch(url+"crearRegistro", {
+            fetch(url+"crearregistro", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -150,21 +150,20 @@ frmCiudadanos.addEventListener('submit', (e)=>{
                 planeta_origen: planetaOrigen.value,
                 planeta_residencia: planetaResidencia.value,
                 foto: foto.value,
-                codigo_qr: codigoqr.value, 
-                estado: 1, // Estado vivo              
+                codigo_qr: codigoqr.value,             
                 }),
             })
             .then(Response => Response.json())
-            .then(Response=>
+            .then(Response=>{
                 Swal.fire("Creado Exitosamente")
-                //console.log(Response)
+                console.log(Response)
                 //location.reload()
-            );
+            });
         }
         if(opcion === "editar"){
         //console.log("editar");
         // recibir los datos del formulario
-        fetch(url+"modificar/"+codigo,{
+        fetch(url+"actualizarregistro/"+codigo,{
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
