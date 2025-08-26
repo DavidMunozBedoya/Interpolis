@@ -14,6 +14,14 @@ export const usuarioMiddleware = (req, res, next) =>{
     try{
         const tokenRecibido = req.headers.authorization;
 
+        // Mostrar el token en la respuesta Y continuar
+        /* res.status(200).send({
+            status: "success",
+            message: "Token recibido correctamente - MODO PRUEBA",
+            token: tokenRecibido,
+            timestamp: new Date().toISOString()
+        }); */
+
         if(!tokenRecibido){
             return res.status(401).send({
                 status: "error",

@@ -1,6 +1,7 @@
 import dbconn from "../../config/dbConexion.js";
 
 export async function getCiudadanos() {
+    
     const [rows] = await dbconn.query("SELECT * FROM ciudadano");
     return rows;
 }

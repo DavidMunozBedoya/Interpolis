@@ -7,13 +7,17 @@ import{
     deleteRegistro,
 } from "./ciudadano.controller.js";
 
+import { 
+    subirFoto 
+} from "../helpers/multerConfig.js";
+
 const router = express.Router();
 
 //rutas
 router.get("/listarciudadanos", getAllCiudadanos);
 router.get("/traerciudadano/:codigo", getCiudadanoXCodigo);
-router.post("/crearregistro", createNuevoRegistro);
-router.put("/actualizarregistro/:codigo", updateRegistro);
+router.post("/crearregistro", subirFoto.single("foto"), createNuevoRegistro);
+router.put("/actualizarregistro/:codigo", subirFoto.single("foto"), updateRegistro);
 router.delete("/eliminarregistro/:codigo", deleteRegistro);
 
 export default router;
