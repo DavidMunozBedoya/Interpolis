@@ -9,10 +9,10 @@ import {
 
 const router = express.Router();
 
-router.get("/listaramonestaciones", getAllAmonestaciones);
-router.get("/listaramonestaciones/:id", getAmonestacionById);
-router.post("/crearamonestacion", createAmonestacion);
-router.put("/actualizaramonestacion/:id", updateAmonestacion);
-router.delete("/eliminaramonestacion/:id", deleteAmonestacion);
+router.get("/listar", getAllAmonestaciones);
+router.get("/buscar/:id", getAmonestacionById);
+router.post("/crear", createAmonestacion);
+router.put("/actualizar/:id", updateAmonestacion);
+router.delete("/eliminar/:id", deleteAmonestacion);
 
 export default router;

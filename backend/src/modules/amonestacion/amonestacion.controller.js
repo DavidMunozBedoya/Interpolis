@@ -60,6 +60,7 @@ export async function createAmonestacion(req, res) {
         const amonestacionCreada = await createAmonestacionDb(amonestacionData);
         res.status(201).send({
             status: "ok",
+            message: "Amonestación creada exitosamente",
             data: amonestacionCreada,
         });
     } catch (error) {

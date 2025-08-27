@@ -6,7 +6,7 @@ export async function getEstadosProcesalesDb() {
 }
 
 export async function getEstadoProcesalByIdDb(id) {
-    const [rows] = await dbconn.query("SELECT * FROM estado_procesal WHERE id = ?", [id]);
+    const [rows] = await dbconn.query("SELECT * FROM estado_procesal WHERE idestado_procesal = ?", [id]);
     return rows[0];
 }
 
@@ -20,13 +20,13 @@ export async function createEstadoProcesalDb(data) {
 
 export async function updateEstadoProcesalDb(id, data) {
     const [result] = await dbconn.query(
-        "UPDATE estado_procesal SET ? WHERE id = ?",
+        "UPDATE estado_procesal SET ? WHERE idestado_procesal = ?",
         [data, id]
     );
     return result;
 }
 
 export async function deleteEstadoProcesalDb(id) {
-    const [result] = await dbconn.query("DELETE FROM estado_procesal WHERE id = ?", [id]);
+    const [result] = await dbconn.query("DELETE FROM estado_procesal WHERE idestado_procesal = ?", [id]);
     return result;
 }

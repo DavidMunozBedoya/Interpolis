@@ -8,7 +8,7 @@ import {
   authenticacionUsuarioDb
 } from "./usuario.model.js";
 
-
+import { enviarCorreo } from "../../libs/mailer.js";
 import { validarUsuario } from "../helpers/validaciones.js";
 
 export async function getAllUsuarios(req, res) {
@@ -53,7 +53,6 @@ export async function getUsuarioById(req, res) {
 export async function createUsuario(req, res) {
   try {
     let data = req.body;
-
     // Validación usando helper
     const errores = validarUsuario(data);
     if (errores.length > 0) {
@@ -66,16 +65,66 @@ export async function createUsuario(req, res) {
     }
 
     const result = await createUsuarioDb(data);
+    
+    // Generar token para el nuevo usuario
+    const token = generarToken({
+      id: result.insertId,
+      nombres: data.nombres,
+      correo: data.correo
+    }, process.env.TOKEN_LIFE);
+
+    // Enviar correo de confirmación con el token
+    if (!data.correo) {
+      throw new Error("Correo no proporcionado");
+    }
+
+    await enviarCorreo(
+      data.correo,
+      "Bienvenido a Interpolice - Credenciales de Acceso",
+      `Hola ${data.nombres},
+
+Tu cuenta ha sido creada exitosamente en el sistema de Interpolice.
+
+Datos de tu cuenta:
+- Nombre: ${data.nombres} ${data.apellidos}
+- Correo: ${data.correo}
+
+Tu token de acceso es:
+${token}
+
+Por favor, guarda este token de forma segura. Lo necesitarás para acceder al sistema.
+
+Para usar el token:
+1. Ve a la página de inicio de sesión
+2. Ingresa tu correo
+3. Usa este token como tu credencial de acceso
+
+Por seguridad, este token expirará en 2 horas.
+
+¡Bienvenido al equipo!`
+    );
+
+    // Enviar respuesta al cliente
     res.status(200).send({
       status: "ok",
       data: result,
+      token: token
     });
+
+    // Enviar respuesta al cliente
+    res.status(200).send({
+      status: "ok",
+      data: result,
+      token: token
+    });
+
   } catch (error) {
     res.status(500).send({
       status: "error",
       message: error.message,
     });
   }
+  
 }
 
 export async function updateUsuario(req, res) {

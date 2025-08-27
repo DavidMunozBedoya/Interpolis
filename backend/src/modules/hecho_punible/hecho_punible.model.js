@@ -6,7 +6,7 @@ export async function getHechosPuniblesDb() {
 }
 
 export async function getHechoPunibleByIdDb(id) {
-    const [rows] = await dbconn.query("SELECT * FROM hecho_punible WHERE id = ?", [id]);
+    const [rows] = await dbconn.query("SELECT * FROM hecho_punible WHERE idhecho_punible = ?", [id]);
     return rows[0];
 }
 
@@ -20,13 +20,13 @@ export async function createHechoPunibleDb(data) {
 
 export async function updateHechoPunibleDb(id, data) {
     const [result] = await dbconn.query(
-        "UPDATE hecho_punible SET ? WHERE id = ?",
+        "UPDATE hecho_punible SET ? WHERE idhecho_punible = ?",
         [data, id]
     );
     return result;
 }
 
 export async function deleteHechoPunibleDb(id) {
-    const [result] = await dbconn.query("DELETE FROM hecho_punible WHERE id = ?", [id]);
+    const [result] = await dbconn.query("DELETE FROM hecho_punible WHERE idhecho_punible = ?", [id]);
     return result;
 }

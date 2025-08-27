@@ -10,10 +10,10 @@ import {
 const router = express.Router();
 
 // Rutas protegidas con token
-router.get("/", getAllCiudadanoHechoDelitos);
-router.get("/:id", getCiudadanoHechoDelitoById);
-router.post("/", createCiudadanoHechoDelito);
-router.put("/:id", updateCiudadanoHechoDelito);
-router.delete("/:id", deleteCiudadanoHechoDelito);
+router.get("/listar", getAllCiudadanoHechoDelitos);
+router.get("/buscar/:id", getCiudadanoHechoDelitoById);
+router.post("/crear/", createCiudadanoHechoDelito);
+router.put("/actualizar/:id", updateCiudadanoHechoDelito);
+router.delete("/eliminar/:id", deleteCiudadanoHechoDelito);
 
 export default router;

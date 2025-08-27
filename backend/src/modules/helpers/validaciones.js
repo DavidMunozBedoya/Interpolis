@@ -54,22 +54,22 @@ export function validarCiudadano(data) {
 export function validarUsuario(data) {
     const errores = [];
     // Nombre
-    if (validator.isEmpty(data.nombre)) {
-        errores.push({ campo: "nombre", mensaje: "El nombre es obligatorio." });
-    } else if (!validator.isAlpha(data.nombre, 'es-ES', { ignore: " " })) {
-        errores.push({ campo: "nombre", mensaje: "El nombre solo puede contener letras." });
+    if (validator.isEmpty(data.nombres)) {
+        errores.push({ campo: "nombres", mensaje: "El nombre es obligatorio." });
+    } else if (!validator.isAlpha(data.nombres, 'es-ES', { ignore: " " })) {
+        errores.push({ campo: "nombres", mensaje: "El nombre solo puede contener letras." });
     }
     // Apellidos
     if (validator.isEmpty(data.apellidos)) {
-        errores.push({ campo: "apellido", mensaje: "El apellido es obligatorio." });
+        errores.push({ campo: "apellidos", mensaje: "El apellido es obligatorio." });
     } else if (!validator.isAlpha(data.apellidos, 'es-ES', { ignore: " " })) {
-        errores.push({ campo: "apellido", mensaje: "El apellido solo puede contener letras." });
+        errores.push({ campo: "apellidos", mensaje: "El apellido solo puede contener letras." });
     }
     // Email
-    if (validator.isEmpty(data.email)) {
-        errores.push({ campo: "email", mensaje: "El email es obligatorio." });
-    } else if (!validator.isEmail(data.email)) {
-        errores.push({ campo: "email", mensaje: "El email no es válido." });
+    if (validator.isEmpty(data.correo)) {
+        errores.push({ campo: "correo", mensaje: "El correo es obligatorio." });
+    } else if (!validator.isEmail(data.correo)) {
+        errores.push({ campo: "correo", mensaje: "El correo no es válido." });
     }
     // Password
     if (validator.isEmpty(data.password)) {
@@ -114,22 +114,54 @@ export function validarEstado(data) {
 
 export function validarAmonestacion(data) {
     const errores = [];
-
-    // Validar descripción
-    if (validator.isEmpty(data.descripcion)) {
-        errores.push({ campo: "descripcion", mensaje: "La descripción de la amonestación es obligatoria." });
+    
+    // Validar código de ciudadano
+    if (validator.isEmpty(data.codigo_ciudadano)) {
+        errores.push({ campo: "codigo_ciudadano", mensaje: "El código del ciudadano es obligatorio." });
     }
 
     // Validar fecha
     if (validator.isEmpty(data.fecha)) {
         errores.push({ campo: "fecha", mensaje: "La fecha de la amonestación es obligatoria." });
-    } else if (!validator.isDate(data.fecha)) {
-        errores.push({ campo: "fecha", mensaje: "La fecha de la amonestación no es válida." });
     }
 
-    // Validar el monto de la multa si existe
-    if (data.monto && !validator.isNumeric(data.monto.toString())) {
-        errores.push({ campo: "monto", mensaje: "El monto de la multa debe ser un número válido." });
+    // Validar el motivo
+    if (validator.isEmpty(data.motivo)) {
+        errores.push({ campo: "motivo", mensaje: "El motivo de la amonestación es obligatorio." });
+    }
+
+    // Validar nivel de amonestación
+    if (validator.isEmpty(data.nivel_amonestacion)) {
+        errores.push({ campo: "nivel_amonestacion", mensaje: "El nivel de amonestación es obligatorio." });
+    } else if (!validator.isNumeric(data.nivel_amonestacion)) {
+        errores.push({ campo: "nivel_amonestacion", mensaje: "El nivel de amonestación debe ser un número." });
+    }
+
+    // Validar valor multa
+    if (!validator.isEmpty(data.valor_multa) && !validator.isNumeric(data.valor_multa.toString())) {
+        errores.push({ campo: "valor_multa", mensaje: "El valor de la multa debe ser un número válido." });
+    }
+
+    // Validar curso cívico
+    if (!validator.isEmpty(data.curso_civico) && !validator.isNumeric(data.curso_civico.toString())) {
+        errores.push({ campo: "curso_civico", mensaje: "El curso cívico debe ser un número válido." });
+    }
+
+    // Validar trabajo cívico días
+    if (!validator.isEmpty(data.trabajo_civico_dias) && !validator.isNumeric(data.trabajo_civico_dias.toString())) {
+        errores.push({ campo: "trabajo_civico_dias", mensaje: "Los días de trabajo cívico deben ser un número válido." });
+    }
+
+    // Validar días de cárcel
+    if (!validator.isEmpty(data.carcel_dias) && !validator.isNumeric(data.carcel_dias.toString())) {
+        errores.push({ campo: "carcel_dias", mensaje: "Los días de cárcel deben ser un número válido." });
+    }
+
+    // Validar convierte antecedente
+    if (validator.isEmpty(data.convierte_antecedente)) {
+        errores.push({ campo: "convierte_antecedente", mensaje: "Debe especificar si convierte a antecedente." });
+    } else if (!validator.isNumeric(data.convierte_antecedente)) {
+        errores.push({ campo: "convierte_antecedente", mensaje: "El valor de convierte antecedente debe ser 0 o 1." });
     }
 
     return errores;
@@ -138,16 +170,14 @@ export function validarAmonestacion(data) {
 export function validarEstadoDelito(data) {
     const errores = [];
 
-    if (!data.id_estado) {
-        errores.push({ campo: "id_estado", mensaje: "El ID del estado es obligatorio." });
+    
+    if (!data.delito_iddelito) {
+        errores.push({ campo: "delito_iddelito", mensaje: "El ID del delito es obligatorio." });
     }
-    if (!data.id_delito) {
-        errores.push({ campo: "id_delito", mensaje: "El ID del delito es obligatorio." });
-    }
-    if (validator.isEmpty(data.fecha_registro)) {
-        errores.push({ campo: "fecha_registro", mensaje: "La fecha de registro es obligatoria." });
-    } else if (!validator.isDate(data.fecha_registro)) {
-        errores.push({ campo: "fecha_registro", mensaje: "La fecha de registro no es válida." });
+    if (validator.isEmpty(data.fecha_estado)) {
+        errores.push({ campo: "fecha_estado", mensaje: "La fecha de registro es obligatoria." });
+    } else if (!validator.isDate(data.fecha_estado)) {
+        errores.push({ campo: "fecha_estado", mensaje: "La fecha de registro no es válida." });
     }
 
     return errores;
@@ -215,20 +245,17 @@ export function validarRol(data) {
 export function validarCiudadanoHechoDelito(data) {
     const errores = [];
 
-    if (!data.id_ciudadano) {
-        errores.push({ campo: "id_ciudadano", mensaje: "El ID del ciudadano es obligatorio." });
+    if (!data.codigo_ciudadano) {
+        errores.push({ campo: "codigo_ciudadano", mensaje: "El ID del ciudadano es obligatorio." });
     }
-    if (!data.id_delito) {
-        errores.push({ campo: "id_delito", mensaje: "El ID del delito es obligatorio." });
+    if (!data.idhecho_punible) {
+        errores.push({ campo: "idhecho_punible", mensaje: "El ID del hecho punible es obligatorio." });
     }
-    if (!data.id_hecho) {
-        errores.push({ campo: "id_hecho", mensaje: "El ID del hecho punible es obligatorio." });
+    if (!data.iddelito) {
+        errores.push({ campo: "iddelito", mensaje: "El ID del delito es obligatorio." });
     }
-    if (validator.isEmpty(data.fecha_registro)) {
-        errores.push({ campo: "fecha_registro", mensaje: "La fecha de registro es obligatoria." });
-    } else if (!validator.isDate(data.fecha_registro)) {
-        errores.push({ campo: "fecha_registro", mensaje: "La fecha de registro no es válida." });
-    }
+    
+    
 
     return errores;
 }
