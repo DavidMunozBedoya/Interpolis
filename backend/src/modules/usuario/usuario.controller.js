@@ -175,6 +175,7 @@ export async function deleteUsuario(req, res) {
     }
     res.status(200).send({
       status: "ok",
+      message: "Usuario eliminado exitosamente.",
       data: result,
     });
   } catch (error) {

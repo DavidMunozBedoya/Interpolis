@@ -19,6 +19,11 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+// Sirve las carpetas públicas para fotos y qrs
+app.use('/fotos', express.static('public/fotos'));
+app.use('/qrs', express.static('public/qrcodes'));
+
+//rutas
 app.use("/ciudadano", ciudadanoModule);
 app.use("/usuario", usuarioModule);
 app.use("/delito", delitoModule);
@@ -29,7 +34,6 @@ app.use("/estado-procesal", estadoProcesalModule);
 app.use("/hecho-punible", hechoPunibleModule);
 app.use("/rol", rolModule);
 app.use("/ciudadano-hecho-delito", ciudadanoHechoDelitoModule);
-app.use("/codigo_qr", express.static("public/qrcodes"));
 
 let puerto = process.env.APP_PORT || 4100;
 app.listen(puerto, () => {

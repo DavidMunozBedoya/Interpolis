@@ -2,7 +2,7 @@
 import * as bootstrap from 'bootstrap'
 import Swal from 'sweetalert2';
 const tbody = document.querySelector('#tbody');
-const url = "http://localhost:4100/ciudadano/";
+const url = "https://backend-interpolis.onrender.com/ciudadano/";
 const modal = new bootstrap.Modal(document.getElementById('modalCiudadanos'));
 const btnCrear = document.querySelector('#btnCrear');
 const frmCiudadanos = document.querySelector("#frmCiudadanos");
@@ -16,17 +16,16 @@ let fechaNacimiento = document.querySelector("#fechaNacimiento");
 let planetaOrigen = document.querySelector("#planetaOrigen");
 let planetaResidencia = document.querySelector("#planetaResidencia");
 let foto = document.querySelector("#foto");
-let codigoqr = document.querySelector("#codigoqr");
 
 document.addEventListener("DOMContentLoaded", cargarCiudadanos);
 
-function cargarCiudadanos(){
-    fetch(url+"listarciudadanos")
-    .then(Response => Response.json())
-    .then((datos)=>{
-        //console.log(datos);
-        llenarTabla(datos);
-    });
+function cargarCiudadanos() {
+    fetch(url + "listarciudadanos")
+        .then(Response => Response.json())
+        .then((datos) => {
+            //console.log(datos);
+            llenarTabla(datos);
+        });
 }
 
 
@@ -46,8 +45,8 @@ function llenarTabla(datos) {
             <td>${fechaFormateada}</td> 
             <td>${ciudadano.planeta_origen}</td> 
             <td>${ciudadano.planeta_residencia}</td> 
-            <td>${ciudadano.foto}</td> 
-            <td>${ciudadano.codigo_qr}</td>  
+            <td><img src="https://backend-interpolis.onrender.com/fotos/${ciudadano.foto}" width="50"></td>
+            <td><img src="https://backend-interpolis.onrender.com/qrs/${ciudadano.codigo_qr}" width="50"></td> 
             <td>
                 <button type="button" class="btn btn-primary btn-sm btnEditar">
                     <i class="bi bi-pencil"></i>
@@ -62,7 +61,7 @@ function llenarTabla(datos) {
     });
 }
 
-btnCrear.addEventListener("click", ()=>{
+btnCrear.addEventListener("click", () => {
     nombre.value = "";
     apellidos.value = "";
     apodo.value = "";
@@ -70,13 +69,12 @@ btnCrear.addEventListener("click", ()=>{
     planetaOrigen.value = "";
     planetaResidencia.value = "";
     foto.value = "";
-    codigoqr.value = "";
     opcion = "crear";
     modal.show();
 })
 
-tbody.addEventListener("click", (e)=>{
-    if(e.target.closest(".btnEditar")){
+tbody.addEventListener("click", (e) => {
+    if (e.target.closest(".btnEditar")) {
         const boton = e.target.closest(".btnEditar");
         const fila = boton.closest("tr");
         codigo = fila.children[0].textContent;
@@ -86,15 +84,13 @@ tbody.addEventListener("click", (e)=>{
         const fechaTabla = fila.children[4].textContent;
         const [dia, mes, año] = fechaTabla.split('/');
         fechaNacimiento.value = `${año}-${mes}-${dia}`;
-        console.log("la fecha de nacimiento es: ",fechaNacimiento.value);
+        console.log("la fecha de nacimiento es: ", fechaNacimiento.value);
         planetaOrigen.value = fila.children[5].textContent;
         planetaResidencia.value = fila.children[6].textContent;
-        foto.value = fila.children[7].textContent;
-        codigoqr.value = fila.children[8].textContent;
         opcion = "editar";
         modal.show();
     }
-    if(e.target.closest(".btnBorrar")){
+    if (e.target.closest(".btnBorrar")) {
         const boton = e.target.closest(".btnBorrar");
         const fila = boton.closest("tr");
         codigo = fila.children[0].textContent;
@@ -107,84 +103,95 @@ tbody.addEventListener("click", (e)=>{
             cancelButtonText: "Cancelar"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(url + "eliminarregistro/" + codigo,{
+                fetch(url + "eliminarregistro/" + codigo, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
                     }
                 })
-                .then((Response) => Response.json())
-                .then((Response) =>{
+                    .then((Response) => Response.json())
+                    .then((Response) => {
+                        if (
+                        Response.message &&
+                        Response.message.includes("a foreign key constraint fails")
+                    ) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'No se pudo eliminar',
+                            text: 'El ciudadano tiene registros relacionados y no puede ser eliminado.'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Registro eliminado correctamente",
+                            icon: "success"
+                        });
+                        cargarCiudadanos();
+                    }
+                })
+                .catch(error => {
                     Swal.fire({
-                        title: "Registro eliminado correctamente",
-                        icon: "success"
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un error al intentar eliminar.'
                     });
-                    cargarCiudadanos();
+                    console.error(error);
                 });
             }
         });
     }
-
 });
 
-frmCiudadanos.addEventListener('submit', (e)=>{
+frmCiudadanos.addEventListener('submit', (e) => {
     e.preventDefault();
-    if(nombre.value === "" || apellidos.value === "" || apodo.value === "" || fechaNacimiento.value === "" || planetaOrigen.value === "" || planetaResidencia.value === "" || foto.value === "" || codigoqr.value === ""){
+    if (
+        nombre.value === "" ||
+        apellidos.value === "" ||
+        apodo.value === "" ||
+        fechaNacimiento.value === "" ||
+        planetaOrigen.value === "" ||
+        planetaResidencia.value === "" ||
+        foto.files.length === 0 // Validar archivo foto
+    ) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: 'Todos los campos son obligatorios!',
         });
-    }else{
-        if(opcion === "crear"){
-            fetch(url+"crearregistro", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                nombre: nombre.value,
-                apellidos: apellidos.value,
-                apodo_nickname: apodo.value,
-                fecha_nacimiento: fechaNacimiento.value,
-                planeta_origen: planetaOrigen.value,
-                planeta_residencia: planetaResidencia.value,
-                foto: foto.value,
-                codigo_qr: codigoqr.value,             
-                }),
-            })
-            .then(Response => Response.json())
-            .then(Response=>{
-                Swal.fire("Creado Exitosamente")
-                console.log(Response)
-                //location.reload()
-            });
-        }
-        if(opcion === "editar"){
-        //console.log("editar");
-        // recibir los datos del formulario
-        fetch(url+"actualizarregistro/"+codigo,{
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                nombre: nombre.value,
-                apellidos: apellidos.value,
-                apodo_nickname: apodo.value,
-                fecha_nacimiento: fechaNacimiento.value,
-                planeta_origen: planetaOrigen.value,
-                planeta_residencia: planetaResidencia.value,
-                foto: foto.value,
-                codigo_qr: codigoqr.value,                   
-            }),
-        })
-        .then(response => response.json())
-        .then(response=>{
-            Swal.fire("modificado Exitosamente!!!")
-        });
+    } else {
+        const formData = new FormData();
+        formData.append('nombre', nombre.value);
+        formData.append('apellidos', apellidos.value);
+        formData.append('apodo_nickname', apodo.value);
+        formData.append('fecha_nacimiento', fechaNacimiento.value);
+        formData.append('planeta_origen', planetaOrigen.value);
+        formData.append('planeta_residencia', planetaResidencia.value);
+        formData.append('foto', foto.files[0]); // Solo la foto
 
+        if (opcion === "crear") {
+            fetch(url + "crearregistro", {
+                method: "POST",
+                body: formData
+            })
+                .then(Response => Response.json())
+                .then(Response => {
+                    Swal.fire("Creado Exitosamente")
+                    cargarCiudadanos();
+                    //location.reload()
+                });
+        }
+        if (opcion === "editar") {
+            //console.log("editar");
+            fetch(url + "actualizarregistro/" + codigo, {
+                method: "PUT",
+                body: formData
+            })
+                .then(Response => Response.json())
+                .then(Response => {
+                    Swal.fire("Actualizado Exitosamente")
+                    console.log(Response)
+                    cargarCiudadanos();
+                });
+        }
     }
     modal.hide();
-    }
-})
+});
