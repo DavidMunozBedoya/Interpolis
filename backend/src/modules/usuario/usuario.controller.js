@@ -63,7 +63,7 @@ export async function createUsuario(req, res) {
       });
       return;
     }
-
+    
     const result = await createUsuarioDb(data);
     
     // Generar token para el nuevo usuario

@@ -30,8 +30,13 @@ export const usuarioMiddleware = (req, res, next) =>{
         }
 
         //comparacion token req con token generado en el login
+        const token = tokenRecibido.startsWith("Bearer ")
+        ? tokenRecibido.split(' ')[1]
+        : tokenRecibido;
 
-        let tokenOK = jwt.verify(tokenRecibido, process.env.JWT_SECRET);
+
+        let tokenOK = jwt.verify(token, process.env.JWT_SECRET);
+        
         if(!tokenOK){
             return res.status(401).send({
                 status: "error",
