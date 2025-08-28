@@ -111,13 +111,6 @@ Por seguridad, este token expirará en 2 horas.
       token: token
     });
 
-    // Enviar respuesta al cliente
-    res.status(200).send({
-      status: "ok",
-      data: result,
-      token: token
-    });
-
   } catch (error) {
     res.status(500).send({
       status: "error",
