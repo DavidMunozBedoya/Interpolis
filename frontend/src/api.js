@@ -1,5 +1,5 @@
 // api.js
-const BASE_URL = "https://jsonplaceholder.typicode.com";
+const BASE_URL = "https://backend-interpolis.onrender.com";
 
 async function fetchData(endpoint) {
   try {
