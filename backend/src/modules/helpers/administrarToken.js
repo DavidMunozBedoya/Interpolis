@@ -5,7 +5,7 @@ export const generarToken = (payload, vida) => {
     const options = {
         expiresIn: vida,
     };
-    return jwt.sign(payload, process.env.SALT, options);
+    return jwt.sign(payload, process.env.JWT_SECRET, options);
 
 };
 
@@ -31,7 +31,7 @@ export const usuarioMiddleware = (req, res, next) =>{
 
         //comparacion token req con token generado en el login
 
-        let tokenOK = jwt.verify(tokenRecibido, process.env.SALT);
+        let tokenOK = jwt.verify(tokenRecibido, process.env.JWT_SECRET);
         if(!tokenOK){
             return res.status(401).send({
                 status: "error",
